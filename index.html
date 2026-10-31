@@ -45,7 +45,7 @@ p{margin:0}
 .s-graphite{--bg:var(--graphite);--fg:var(--bone);--muted:var(--dim);--rule:var(--rule-dark);--hot:var(--signal-hi)}
 .s-coal{--bg:var(--coal);--fg:var(--bone);--muted:var(--dim);--rule:var(--rule-dark);--hot:var(--signal-hi)}
 .s-void{--bg:var(--void);--fg:var(--bone);--muted:var(--dim);--rule:var(--rule-dark);--hot:var(--signal-hi);color-scheme:dark}
-.s-red{--bg:var(--signal);--fg:var(--bone);--muted:rgba(242,240,236,.86);--rule:rgba(18,18,19,.28);--hot:var(--ink)}
+.s-red{--bg:var(--signal);--fg:var(--bone);--muted:var(--bone);--rule:rgba(18,18,19,.28);--hot:var(--ink)}
 
 /* shared type */
 .kicker,.mono{font-family:var(--f-mono);font-size:11px;line-height:1.5;letter-spacing:.12em;text-transform:uppercase;font-stretch:87.5%}
@@ -71,7 +71,12 @@ p{margin:0}
 .route nav a[aria-current="true"]{color:var(--bone);border-color:var(--rule-dark);background:rgba(242,240,236,.04)}
 .progress{height:2px;overflow:hidden}
 .progress i{display:block;height:100%;background:var(--signal);transform-origin:left center;transform:scaleX(0)}
-@media (max-width:640px){.mark .mono{display:none}}
+.motion{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:32px;padding:6px 10px;background:transparent;color:var(--bone);border:1px solid var(--rule-dark);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-stretch:87.5%;cursor:pointer}
+.motion:hover{border-color:var(--bone)}
+.motion-ico{width:10px;height:11px;background:linear-gradient(90deg,var(--bone) 0 35%,transparent 35% 65%,var(--bone) 65%)}
+.motion[aria-pressed="true"] .motion-ico{background:var(--signal-hi);clip-path:polygon(0 0,100% 50%,0 100%)}
+.motion-off .reel img,.motion-off .anim,.motion-off .ticker-track{animation-play-state:paused!important}
+@media (max-width:640px){.mark .mono{display:none}.motion-txt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
 
 /* ---------- moving backdrops ---------- */
 .reel{position:absolute;inset:0;z-index:0;overflow:hidden;background:var(--void)}
@@ -87,7 +92,7 @@ p{margin:0}
 .anim{animation-play-state:paused!important}
 .is-live .reel img{animation-play-state:running}
 .is-live .anim{animation-play-state:running!important}
-.reel-cap{position:absolute;z-index:3;top:18px;right:var(--gut-r);display:flex;align-items:center;gap:8px;max-width:calc(100% - 32px);color:var(--bone);background:rgba(10,10,11,.55);padding:6px 10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-stretch:87.5%;pointer-events:none}
+.reel-cap{position:absolute;z-index:3;top:18px;right:var(--gut-r);display:flex;align-items:center;gap:8px;max-width:calc(100% - 32px);color:var(--bone);background:rgba(10,10,11,.78);padding:6px 10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-stretch:87.5%;pointer-events:none}
 .reel-cap::before{content:"";width:7px;height:7px;background:var(--signal-hi);flex:none}
 
 /* doors: the dark, moving opening of each stage */
@@ -106,7 +111,7 @@ p{margin:0}
 .strip::before{top:7px}.strip::after{bottom:7px}
 .strip-track{display:flex;width:max-content;animation:strip 80s linear infinite}
 .strip-set{display:flex;gap:10px;padding-right:10px}
-.cell{flex:none;position:relative;width:clamp(260px,30vw,440px);aspect-ratio:16/9;overflow:hidden;display:grid;place-items:center;padding:14px;background:radial-gradient(120% 90% at 50% 40%,var(--graphite) 0%,var(--void) 100%)}
+.cell{flex:none;position:relative;width:clamp(280px,32vw,520px);aspect-ratio:16/9;overflow:hidden;display:grid;place-items:center;padding:14px;background:radial-gradient(120% 90% at 50% 40%,var(--graphite) 0%,var(--void) 100%)}
 .cell img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover}
 .cell-tag{position:absolute;z-index:1;top:10px;left:12px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--bone);opacity:.8}
 .cell--title{align-content:center;gap:8px;text-align:center}
@@ -227,6 +232,12 @@ p{margin:0}
 .play{position:absolute;left:24px;bottom:24px;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 12px;background:var(--signal);color:var(--bone);font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-stretch:87.5%;transition:transform .25s ease,background .25s}
 .play::before{content:"";width:12px;height:14px;background:var(--bone);clip-path:polygon(0 0,100% 50%,0 100%)}
 .film:hover .play,.film:focus-visible .play{transform:translateX(4px);background:var(--ink)}
+.frame--type{background:radial-gradient(120% 100% at 30% 30%,var(--graphite) 0%,var(--void) 100%)}
+.type-card{position:absolute;inset:0;display:grid;align-content:center;justify-items:start;gap:12px;padding:8% 10% 18%;transition:transform .6s ease}
+.type-card .mono{color:var(--dim)}
+.type-card b{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,4vw,62px);line-height:.88;text-transform:uppercase;color:var(--bone)}
+.type-card em{font-style:normal;color:var(--signal-hi)}
+.film:hover .type-card,.film:focus-visible .type-card{transform:scale(1.03)}
 .film-meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px 16px;flex-wrap:wrap;padding-top:16px}
 .film-meta .kicker{color:var(--hot)}
 
@@ -259,8 +270,9 @@ p{margin:0}
 /* stage 04 */
 .lang{display:grid;grid-template-columns:minmax(0,8fr) minmax(0,4fr);gap:clamp(28px,4vw,56px);align-items:start}
 .lang-main{display:grid;gap:26px;min-width:0}
-.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
-.chips a{display:grid;gap:2px;padding:14px 14px 13px;background:var(--bg);text-decoration:none;transition:background .2s,color .2s;min-width:0}
+.chips{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.chips li{display:flex;min-width:0;background:var(--bg)}
+.chips a{flex:1;display:grid;gap:2px;align-content:start;padding:14px 14px 13px;background:var(--bg);text-decoration:none;transition:background .2s,color .2s;min-width:0}
 .chips .nat{font-family:var(--f-body),var(--f-script);font-weight:700;font-size:18px;line-height:1.3;overflow-wrap:anywhere}
 .chips .eng{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-stretch:87.5%}
 .chips a:hover,.chips a:focus-visible{background:var(--signal);color:var(--bone)}
@@ -369,18 +381,13 @@ p{margin:0}
 .infield .photo{aspect-ratio:3/2}
 @media (max-width:640px){.infield-row{grid-template-columns:minmax(0,1fr)}}
 .voices{display:grid;gap:18px}
-.voice-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.4vw,32px)}
-.voice{margin:0;display:grid;gap:14px;align-content:start;min-width:0}
-.voice .photo{aspect-ratio:4/5}
-.voice blockquote{margin:0}
-.voice blockquote p{font-family:var(--f-display);font-weight:700;font-size:clamp(24px,2.3vw,32px);line-height:1.02;text-transform:uppercase}
+.voice-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(18px,3vw,40px)}
+.voice{margin:0;display:grid;grid-template-columns:minmax(0,42%) minmax(0,1fr);column-gap:clamp(16px,2vw,28px);row-gap:12px;align-content:center;min-width:0}
+.voice .photo{aspect-ratio:4/5;grid-row:span 2}
+.voice blockquote{margin:0;align-self:end}
+.voice blockquote p{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,2.6vw,38px);line-height:1.02;text-transform:uppercase}
 .voice figcaption{color:var(--hot)}
-@media (max-width:760px){
-  .voice-row{grid-template-columns:minmax(0,1fr)}
-  .voice{grid-template-columns:minmax(0,38%) minmax(0,1fr);column-gap:18px;row-gap:10px;align-content:center}
-  .voice .photo{grid-row:span 2}
-  .voice blockquote{align-self:end}
-}
+@media (max-width:860px){.voice-row{grid-template-columns:minmax(0,1fr)}}
 
 /* footer */
 .foot > .wrap{padding-block:clamp(56px,8vw,112px) clamp(36px,5vw,56px);display:grid;gap:clamp(32px,5vw,56px)}
@@ -401,7 +408,7 @@ p{margin:0}
 
 <header class="route">
   <div class="route-in">
-    <a class="mark" href="#top" aria-label="Back to the top"><span class="sq"></span><span class="mono">Human-AI Innovation Edge</span></a>
+    <a class="mark" href="#top" aria-label="Human-AI Innovation Edge, back to the top"><span class="sq"></span><span class="mono">Human-AI Innovation Edge</span></a>
     <nav aria-label="Stages">
       <a href="#briefing"><b>01</b>Briefing</a>
       <a href="#leaders"><b>02</b>Leaders</a>
@@ -409,6 +416,7 @@ p{margin:0}
       <a href="#languages"><b>04</b>Languages</a>
       <a href="#edge"><b>05</b>The Edge</a>
     </nav>
+    <button class="motion" type="button" aria-pressed="false"><span class="motion-ico" aria-hidden="true"></span><span class="motion-txt">Pause motion</span></button>
   </div>
   <div class="progress" aria-hidden="true"><i></i></div>
 </header>
@@ -557,12 +565,12 @@ p{margin:0}
       <li><span class="d-n">02</span><div><p class="d-t">First let them learn to build. Then build to learn.</p><p class="d-p"><b>Vector Green</b>A 41% gain in AI confidence once employees saw they could build solutions to everyday problems.</p></div></li>
       <li><span class="d-n">03</span><div><p class="d-t">Know when to work with AI, and when not to. (AI as Tool, Teammate, and/or Neither.)</p><p class="d-p"><b>KHL Printing</b>67% of employees came to see AI as both Tool and Teammate, up from 56%.</p></div></li>
       <li><span class="d-n">04</span><div><p class="d-t">Trust the people closest to the work to innovate.</p><p class="d-p"><b>SimplyGo</b>Employee-built prototypes, from compliance monitoring to expense tracking, now governed by a formal AI Working Group.</p></div></li>
-      <li><span class="d-n">05</span><div><p class="d-t">Deepen domain expertise, because it multiplies Design·AI's power (and vice versa).</p><p class="d-p"><b>Art Loft</b>The founder-educator has since designed six new AI-enhanced activities.</p></div></li>
-      <li><span class="d-n">06</span><div><p class="d-t">Scale confidence to act, because scaling skills without confidence stalls.</p><p class="d-p"><b>WSG × SUTD</b>98% of workers aged 50 and above said AI was important for career exploration and transition.</p></div></li>
+      <li><span class="d-n">05</span><div><p class="d-t">Deepen domain expertise — because it multiplies Design·AI's power (and vice versa).</p><p class="d-p"><b>Art Loft</b>The founder-educator has since designed six new AI-enhanced activities.</p></div></li>
+      <li><span class="d-n">06</span><div><p class="d-t">Scale confidence to act — because scaling skills without confidence stalls.</p><p class="d-p"><b>WSG × SUTD</b>98% of workers aged 50 and above said AI was important for career exploration and transition.</p></div></li>
       <li><span class="d-n">07</span><div><p class="d-t">Start small, then build better, bigger, and bolder.</p><p class="d-p"><b>SJ Group</b>Its AI capability started as a team of four.</p></div></li>
-      <li><span class="d-n">08</span><div><p class="d-t">Redesign the work so that humans do what humans do best, and let AI do the rest.</p><p class="d-p"><b>Co-forecasting</b>AI's speed plus human insight compresses forecasting cycles from months into weeks.</p></div></li>
+      <li><span class="d-n">08</span><div><p class="d-t">Redesign the work so that humans do what humans do best — and let AI do the rest.</p><p class="d-p"><b>Co-forecasting</b>AI's speed plus human insight compresses forecasting cycles from months into weeks.</p></div></li>
       <li><span class="d-n">09</span><div><p class="d-t">Create new tasks, new roles, and new value.</p><p class="d-p"><b>Forward Deployment Designer</b>A stalled project went from stuck to beta testing in three months.</p></div></li>
-      <li><span class="d-n">10</span><div><p class="d-t">Invest in community, because it's not just about “me”; it's also about “we.”</p><p class="d-p"><b>SSG × SGTech × SUTD</b>No single organisation could have produced these results alone.</p></div></li>
+      <li><span class="d-n">10</span><div><p class="d-t">Invest in community — because it's not just about “me”; it's also about “we.”</p><p class="d-p"><b>SSG × SGTech × SUTD</b>No single organisation could have produced these results alone.</p></div></li>
     </ol>
     <div class="infield">
       <p class="kicker"><span class="sq"></span>The decisions, in the field · photos from the report</p>
@@ -591,15 +599,17 @@ p{margin:0}
       <div class="strip-track anim">
         <div class="strip-set">
           <div class="cell cell--title"><b>AI Impact Series</b><span>SGTech × SUTD</span></div>
-          <div class="cell"><img src="img/fx/strip-a.jpg" alt="" loading="lazy"><span class="cell-tag">Film A</span></div>
           <div class="cell cell--sub"><span class="cell-tag">Film A</span><p>So what was exciting is we…</p></div>
+          <div class="cell cell--title"><b>Two films</b><span>Short · Long</span></div>
           <div class="cell cell--sub"><span class="cell-tag">Film B</span><p>…actually apply these tools in the workplace.</p></div>
+          <div class="cell cell--sub"><span class="cell-tag">Film B</span><p>…and also help us to create some creativity in our work.</p></div>
         </div>
         <div class="strip-set">
           <div class="cell cell--title"><b>AI Impact Series</b><span>SGTech × SUTD</span></div>
-          <div class="cell"><img src="img/fx/strip-a.jpg" alt="" loading="lazy"><span class="cell-tag">Film A</span></div>
           <div class="cell cell--sub"><span class="cell-tag">Film A</span><p>So what was exciting is we…</p></div>
+          <div class="cell cell--title"><b>Two films</b><span>Short · Long</span></div>
           <div class="cell cell--sub"><span class="cell-tag">Film B</span><p>…actually apply these tools in the workplace.</p></div>
+          <div class="cell cell--sub"><span class="cell-tag">Film B</span><p>…and also help us to create some creativity in our work.</p></div>
         </div>
       </div>
     </div>
@@ -630,8 +640,8 @@ p{margin:0}
       </div>
       <div class="film-wrap">
         <a class="film" href="https://www.youtube.com/watch?v=TwpBCAL7cUE" target="_blank" rel="noopener" aria-label="Watch the long AI Impact Series film on SGTech's YouTube channel">
-          <span class="frame">
-            <img src="img/video-impact-long.jpg" width="960" height="540" alt="A woman in an SGTech shirt speaking in an office, with the on-screen title: Practical ways to apply AI">
+          <span class="frame frame--type">
+            <span class="type-card"><span class="mono">Film B · its on-screen title</span><b>Practical ways to apply <em>AI</em></b></span>
             <span class="corners" aria-hidden="true"></span>
             <span class="play" aria-hidden="true">Play on YouTube</span>
           </span>
@@ -654,11 +664,6 @@ p{margin:0}
           <span class="photo"><img src="img/voice-sgtech.jpg" width="448" height="560" alt="A woman in an SGTech shirt speaking in an office"></span>
           <blockquote><p>“…actually came away with three prototypes.”</p></blockquote>
           <figcaption class="mono">SGTech · Film B, long</figcaption>
-        </figure>
-        <figure class="voice">
-          <span class="photo"><img src="img/voice-film-b.jpg" width="448" height="560" alt="A woman smiling at her desk in an office"></span>
-          <blockquote><p>“…and also help us to create some creativity in our work.”</p></blockquote>
-          <figcaption class="mono">Film B, long</figcaption>
         </figure>
       </div>
     </div>
@@ -695,24 +700,24 @@ p{margin:0}
     <div class="lang">
       <div class="lang-main">
         <p class="lead muted">A prototype companion site carries the report's ideas to readers in the language they think in, from 中文 and Bahasa Melayu to தமிழ் and Singlish. It is an experiment in accessibility. For consequential decisions, check the original report.</p>
-        <div class="chips" role="list" aria-label="Open the companion in a language">
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=en" target="_blank" rel="noopener" lang="en"><span class="nat">English</span><span class="eng">The source</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=zh" target="_blank" rel="noopener" lang="zh-Hans"><span class="nat">中文（简体）</span><span class="eng" lang="en">Chinese</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=yue" target="_blank" rel="noopener" lang="yue"><span class="nat">廣東話</span><span class="eng" lang="en">Cantonese</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=ms" target="_blank" rel="noopener" lang="ms"><span class="nat">Bahasa Melayu</span><span class="eng" lang="en">Malay</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=ta" target="_blank" rel="noopener" lang="ta"><span class="nat">தமிழ்</span><span class="eng" lang="en">Tamil</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=sg" target="_blank" rel="noopener" lang="en-SG"><span class="nat">Singlish</span><span class="eng">Singapore English</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=id" target="_blank" rel="noopener" lang="id"><span class="nat">Bahasa Indonesia</span><span class="eng" lang="en">Indonesian</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=ja" target="_blank" rel="noopener" lang="ja"><span class="nat">日本語</span><span class="eng" lang="en">Japanese</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=ko" target="_blank" rel="noopener" lang="ko"><span class="nat">한국어</span><span class="eng" lang="en">Korean</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=th" target="_blank" rel="noopener" lang="th"><span class="nat">ไทย</span><span class="eng" lang="en">Thai</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=vi" target="_blank" rel="noopener" lang="vi"><span class="nat">Tiếng Việt</span><span class="eng" lang="en">Vietnamese</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=hi" target="_blank" rel="noopener" lang="hi"><span class="nat">हिन्दी</span><span class="eng" lang="en">Hindi</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=fr" target="_blank" rel="noopener" lang="fr"><span class="nat">Français</span><span class="eng" lang="en">French</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=es" target="_blank" rel="noopener" lang="es"><span class="nat">Español</span><span class="eng" lang="en">Spanish</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=de" target="_blank" rel="noopener" lang="de"><span class="nat">Deutsch</span><span class="eng" lang="en">German</span></a>
-          <a role="listitem" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=nl" target="_blank" rel="noopener" lang="nl"><span class="nat">Nederlands</span><span class="eng" lang="en">Dutch</span></a>
-        </div>
+        <ul class="chips" aria-label="Open the companion in a language">
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=en" target="_blank" rel="noopener" lang="en"><span class="nat">English</span><span class="eng">The source</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=zh" target="_blank" rel="noopener" lang="zh-Hans"><span class="nat">中文（简体）</span><span class="eng" lang="en">Chinese</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=yue" target="_blank" rel="noopener" lang="yue"><span class="nat">廣東話</span><span class="eng" lang="en">Cantonese</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=ms" target="_blank" rel="noopener" lang="ms"><span class="nat">Bahasa Melayu</span><span class="eng" lang="en">Malay</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=ta" target="_blank" rel="noopener" lang="ta"><span class="nat">தமிழ்</span><span class="eng" lang="en">Tamil</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=sg" target="_blank" rel="noopener" lang="en-SG"><span class="nat">Singlish</span><span class="eng">Singapore English</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=id" target="_blank" rel="noopener" lang="id"><span class="nat">Bahasa Indonesia</span><span class="eng" lang="en">Indonesian</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=ja" target="_blank" rel="noopener" lang="ja"><span class="nat">日本語</span><span class="eng" lang="en">Japanese</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=ko" target="_blank" rel="noopener" lang="ko"><span class="nat">한국어</span><span class="eng" lang="en">Korean</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=th" target="_blank" rel="noopener" lang="th"><span class="nat">ไทย</span><span class="eng" lang="en">Thai</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=vi" target="_blank" rel="noopener" lang="vi"><span class="nat">Tiếng Việt</span><span class="eng" lang="en">Vietnamese</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=hi" target="_blank" rel="noopener" lang="hi"><span class="nat">हिन्दी</span><span class="eng" lang="en">Hindi</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=fr" target="_blank" rel="noopener" lang="fr"><span class="nat">Français</span><span class="eng" lang="en">French</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=es" target="_blank" rel="noopener" lang="es"><span class="nat">Español</span><span class="eng" lang="en">Spanish</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=de" target="_blank" rel="noopener" lang="de"><span class="nat">Deutsch</span><span class="eng" lang="en">German</span></a></li>
+          <li><a href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=nl" target="_blank" rel="noopener" lang="nl"><span class="nat">Nederlands</span><span class="eng" lang="en">Dutch</span></a></li>
+        </ul>
         <a class="btn-dark ext" href="https://kr48vr.github.io/Designing-Human-AI-Innovation-Edge-For-Enterprises/companion/#lang=en" target="_blank" rel="noopener">Open the companion</a>
       </div>
       <a class="classified" href="https://claude.ai/artifact/1iTurAHRDL1HU4ErbvAaTY" target="_blank" rel="noopener">
@@ -752,7 +757,7 @@ p{margin:0}
           <p class="g-note">Leaders and professionals trained. The April 2026 figure is the workshop participants cited in the report. Bars are drawn to scale.</p>
         </div>
         <div class="pct">
-          <span class="mono" style="color:var(--bone)">Updated 4Q 2026</span>
+          <span class="mono" style="color:var(--bone)">Executive Programmes · AI Impact Series</span>
           <span class="big">92%</span>
           <p>recommendation rate from the leaders and professionals trained.</p>
         </div>
@@ -833,6 +838,18 @@ p{margin:0}
 <script>
 (function(){
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement, motionBtn = document.querySelector('.motion');
+  var motionOff = false;
+  try { motionOff = localStorage.getItem('edge-motion') === 'off'; } catch (e) {}
+  function paintMotion(){
+    root.classList.toggle('motion-off', motionOff);
+    if (motionBtn) {
+      motionBtn.setAttribute('aria-pressed', motionOff ? 'true' : 'false');
+      motionBtn.querySelector('.motion-txt').textContent = motionOff ? 'Play motion' : 'Pause motion';
+    }
+  }
+  paintMotion();
+  if (reduce && motionBtn) motionBtn.hidden = true;
 
   /* ---- reels: crossfade between frames while their section is on screen ---- */
   function Reel(el){
@@ -849,7 +866,7 @@ p{margin:0}
     b.classList.add('is-on'); a.classList.remove('is-on');
     if (this.cap && b.getAttribute('data-cap')) this.cap.textContent = b.getAttribute('data-cap');
   };
-  Reel.prototype.play = function(){ if (this.t || reduce || this.imgs.length < 2) return; var s = this; this.t = setInterval(function(){ s.step(); }, this.ms); };
+  Reel.prototype.play = function(){ if (this.t || reduce || motionOff || this.imgs.length < 2) return; var s = this; this.t = setInterval(function(){ s.step(); }, this.ms); };
   Reel.prototype.stop = function(){ clearInterval(this.t); this.t = 0; };
 
   var live = Array.prototype.slice.call(document.querySelectorAll('[data-live]'));
@@ -858,15 +875,23 @@ p{margin:0}
     el.classList.toggle('is-live', on);
     el._reels.forEach(function(r){ on ? r.play() : r.stop(); });
   }
+  function refreshLive(){
+    live.forEach(function(el){
+      var r = el.getBoundingClientRect();
+      setLive(el, !document.hidden && r.bottom > 0 && r.top < innerHeight);
+    });
+  }
+  if (motionBtn) motionBtn.addEventListener('click', function(){
+    motionOff = !motionOff;
+    try { localStorage.setItem('edge-motion', motionOff ? 'off' : 'on'); } catch (e) {}
+    paintMotion();
+    refreshLive();
+    if (window.edgeCanvasStart) window.edgeCanvasStart();
+  });
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(es){ es.forEach(function(e){ setLive(e.target, e.isIntersecting && !document.hidden); }); }, { rootMargin: '80px 0px' });
     live.forEach(function(el){ io.observe(el); });
-    document.addEventListener('visibilitychange', function(){
-      live.forEach(function(el){
-        var r = el.getBoundingClientRect();
-        setLive(el, !document.hidden && r.bottom > 0 && r.top < innerHeight);
-      });
-    });
+    document.addEventListener('visibilitychange', refreshLive);
   } else {
     live.forEach(function(el){ setLive(el, true); });
   }
@@ -947,9 +972,10 @@ p{margin:0}
         if (n.y < 0 || n.y > H) n.vy *= -1;
       }
       draw();
-      if (visible && !reduce) raf = requestAnimationFrame(step);
+      if (visible && !reduce && !motionOff) raf = requestAnimationFrame(step);
     }
-    function start(){ if (!raf && visible && !reduce) raf = requestAnimationFrame(step); }
+    function start(){ if (!raf && visible && !reduce && !motionOff) raf = requestAnimationFrame(step); }
+    window.edgeCanvasStart = start;
     if ('ResizeObserver' in window) new ResizeObserver(size).observe(hero); else addEventListener('resize', size);
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function(es){ visible = es[0].isIntersecting; if (visible) start(); }).observe(hero);

@@ -393,6 +393,12 @@ p{margin:0}
 .foot > .wrap{padding-block:clamp(56px,8vw,112px) clamp(36px,5vw,56px);display:grid;gap:clamp(32px,5vw,56px)}
 .foot-line{font-family:var(--f-display);font-weight:900;font-size:clamp(44px,7.4vw,118px);line-height:.88;text-transform:uppercase;max-width:15ch}
 .foot-line em{font-style:normal;color:var(--signal-hi)}
+.behind{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;padding:18px 20px;border:1px dashed var(--muted);color:var(--fg);text-decoration:none;transition:border-color .2s}
+.behind:hover{border-color:var(--signal-hi)}
+.behind::after{content:"↗";font-size:24px;color:var(--signal-hi)}
+.behind-txt{display:grid;gap:4px;flex:1;min-width:0}
+.behind-txt .mono{color:var(--muted)}
+.behind-txt b{font-family:var(--f-display);font-weight:800;font-size:clamp(22px,2.2vw,30px);line-height:1;text-transform:uppercase}
 .foot-meta{display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:space-between;border-top:1px solid var(--rule);padding-top:20px;color:var(--muted)}
 .foot-meta a{color:var(--fg);text-decoration:none}
 .foot-meta a:hover{color:var(--signal-hi)}
@@ -827,6 +833,7 @@ p{margin:0}
 <footer class="foot band s-ink">
   <div class="wrap">
     <p class="foot-line">The age of AI is here. How human it becomes is <em>up to us.</em></p>
+    <a class="behind" href="https://claude.ai/artifact/TeyiFTQVrETrSqB28JT8Tv" target="_blank" rel="noopener"><span class="stamp">Invite-only</span><span class="behind-txt"><span class="mono">Restricted file · Behind this page</span><b>How this page was made, its QA log, and King and AI</b></span></a>
     <div class="foot-meta">
       <span class="mono">Designing a Human-AI Innovation Edge for Enterprises · April 2026</span>
       <span class="mono">Developed by SUTD · Supported by SGTech and SkillsFuture Singapore (SSG)</span>

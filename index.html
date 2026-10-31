@@ -16,7 +16,7 @@
   --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
   --f-mono:"Martian Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
   --f-script:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans Tamil","Tamil Sangam MN","Nirmala UI",sans-serif;
-  --t-hero:clamp(40px,7.4vw,124px);
+  --t-hero:clamp(40px,6.4vw,92px);
   --t-h2:clamp(38px,5.4vw,76px);
   --t-h3:clamp(26px,2.8vw,38px);
   --t-lead:clamp(18px,1.55vw,21px);
@@ -77,14 +77,23 @@ p{margin:0}
 .hero{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(100deg,var(--concrete) 35%,var(--concrete-2) 100%)}
 .hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
 .ai-text{position:absolute;z-index:-2;top:-6%;right:-8%;width:min(760px,64%);height:82%;overflow:hidden;font-family:var(--f-mono);font-size:10.5px;line-height:1.6;letter-spacing:.08em;word-spacing:.35em;color:var(--ink);opacity:.09;transform:skewX(-24deg);-webkit-mask-image:linear-gradient(200deg,rgba(0,0,0,1) 25%,rgba(0,0,0,0) 85%);mask-image:linear-gradient(200deg,rgba(0,0,0,1) 25%,rgba(0,0,0,0) 85%);pointer-events:none;user-select:none}
-.hero-in{display:grid;gap:clamp(28px,4vw,48px);padding-block:clamp(36px,6vw,84px) clamp(40px,6vw,80px)}
+.hero-in{display:grid;gap:clamp(28px,4vw,44px);padding-block:clamp(32px,5vw,72px) clamp(36px,5vw,64px)}
+.hero-main{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,5vw,72px);align-items:center}
 .title{font-family:var(--f-display);font-weight:900;font-size:var(--t-hero);line-height:.86;text-transform:uppercase;letter-spacing:.004em;color:var(--ink)}
 .title > span{display:block}
 .title .hot{color:var(--signal)}
 .title .edge-line{display:flex;align-items:center;gap:.18em}
 .title .edge-line > span{min-width:0}
 .title .edge-line::after{content:"";flex:1 1 40px;height:.07em;min-width:40px;background:var(--signal);transform:translateY(-.04em)}
-.hero-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:clamp(28px,5vw,72px);align-items:end}
+.photo{position:relative;display:block;overflow:hidden;background:var(--ink);max-width:100%}
+.photo img{width:100%;height:100%;object-fit:cover}
+.field{margin:0;display:grid;gap:12px;min-width:0;align-content:start}
+.field figcaption{color:var(--muted)}
+.field figcaption b{display:block;color:var(--hot);font-weight:600;margin-bottom:3px}
+.field figcaption span{display:block;font-size:14.5px;line-height:1.45}
+.field--hero{padding:0 14px 0 0}
+.field--hero .photo{aspect-ratio:4/3;box-shadow:14px 14px 0 var(--signal)}
+.field--hero figcaption{margin-top:14px}
 .hero-copy{display:grid;gap:22px;min-width:0}
 .hero-copy .sub{font-size:var(--t-lead);line-height:1.45;max-width:46ch;font-weight:500}
 .hero-copy .by{color:var(--dim-ink)}
@@ -97,14 +106,23 @@ p{margin:0}
 .btn--line:hover{background:var(--ink);color:var(--concrete)}
 .itinerary{min-width:0}
 .itinerary .kicker{color:var(--dim-ink);margin-bottom:10px}
-.itinerary ol{list-style:none;margin:0;padding:0;border-bottom:1px solid var(--rule-light)}
-.itinerary a{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:baseline;gap:10px;padding:11px 8px;border-top:1px solid var(--rule-light);text-decoration:none;color:var(--ink);transition:background .2s,color .2s}
+.itinerary ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:2px solid var(--ink);border-bottom:1px solid var(--rule-light)}
+.itinerary li{min-width:0}
+.itinerary li + li a{border-left:1px solid var(--rule-light)}
+.itinerary a{display:grid;gap:6px;align-content:start;height:100%;padding:12px 14px 14px;text-decoration:none;color:var(--ink);transition:background .2s,color .2s}
 .itinerary .n{font-family:var(--f-mono);font-size:11px;color:var(--signal);font-weight:600}
 .itinerary .t{font-family:var(--f-display);font-weight:700;font-size:21px;line-height:1.05;text-transform:uppercase}
-.itinerary .m{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim-ink);text-align:right;font-stretch:87.5%}
+.itinerary .m{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim-ink);font-stretch:87.5%}
 .itinerary a:hover{background:var(--ink);color:var(--concrete)}
 .itinerary a:hover .m{color:var(--dim)}
-@media (max-width:860px){.hero-row{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){
+  .hero-main{grid-template-columns:minmax(0,1fr)}
+  .field--hero{max-width:560px}
+  .itinerary ol{grid-template-columns:minmax(0,1fr);border-top:0}
+  .itinerary li + li a{border-left:0}
+  .itinerary a{grid-template-columns:34px minmax(0,1fr) auto;align-items:baseline;gap:10px;padding:11px 8px;border-top:1px solid var(--rule-light)}
+  .itinerary .m{text-align:right}
+}
 
 /* ---------- ticker ---------- */
 .ticker{overflow:hidden;border-block:1px solid var(--rule-dark)}
@@ -154,11 +172,8 @@ p{margin:0}
 /* films */
 .film{display:block;text-decoration:none;color:inherit;min-width:0}
 .frame{position:relative;display:block;aspect-ratio:16/9;max-width:100%;overflow:hidden;background:var(--ink)}
-.frame img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease,filter .4s ease}
-.film--mono .frame img{filter:grayscale(1) contrast(1.08)}
+.frame img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
 .film:hover .frame img,.film:focus-visible .frame img{transform:scale(1.035)}
-.film--mono:hover .frame img,.film--mono:focus-visible .frame img{filter:none}
-@media (hover:none){.film--mono .frame img{filter:none}}
 .corners{position:absolute;inset:12px;pointer-events:none;--c:rgba(242,240,236,.85);background:
   linear-gradient(var(--c),var(--c)) left top/20px 2px no-repeat,
   linear-gradient(var(--c),var(--c)) left top/2px 20px no-repeat,
@@ -292,6 +307,30 @@ p{margin:0}
 .clip .go{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--signal);font-stretch:87.5%}
 @media (max-width:760px){.clips{grid-template-columns:minmax(0,1fr)}}
 
+/* people: field photos, voices, faces */
+.infield{display:grid;gap:16px}
+.infield-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(16px,2vw,24px)}
+.infield .photo{aspect-ratio:3/2}
+@media (max-width:960px){.infield-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.voices{display:grid;gap:18px}
+.voice-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.4vw,32px)}
+.voice{margin:0;display:grid;gap:14px;align-content:start;min-width:0}
+.voice .photo{aspect-ratio:4/5}
+.voice blockquote{margin:0}
+.voice blockquote p{font-family:var(--f-display);font-weight:700;font-size:clamp(24px,2.3vw,32px);line-height:1.02;text-transform:uppercase}
+.voice figcaption{color:var(--hot)}
+@media (max-width:760px){
+  .voice-row{grid-template-columns:minmax(0,1fr)}
+  .voice{grid-template-columns:minmax(0,38%) minmax(0,1fr);column-gap:18px;row-gap:10px;align-content:center}
+  .voice .photo{grid-row:span 2}
+  .voice blockquote{align-self:end}
+}
+.faces{display:grid;gap:12px}
+.faces-row{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
+.faces-row img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--ink)}
+.faces .mono{color:var(--bone)}
+@media (max-width:640px){.faces-row{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
 /* footer */
 .foot > .wrap{padding-block:clamp(56px,8vw,112px) clamp(36px,5vw,56px);display:grid;gap:clamp(32px,5vw,56px)}
 .foot-line{font-family:var(--f-display);font-weight:900;font-size:clamp(44px,7.4vw,118px);line-height:.88;text-transform:uppercase;max-width:15ch}
@@ -324,13 +363,14 @@ p{margin:0}
   <div class="ai-text" aria-hidden="true"></div>
   <div class="wrap hero-in">
     <p class="kicker"><span class="sq"></span>Expedition briefing · Singapore 2026 · Only for the brave</p>
-    <h1 class="title" id="title">
-      <span>Designing a <span class="hot">Human-AI</span></span>
-      <span class="edge-line"><span>Innovation <span class="hot">Edge</span></span></span>
-      <span>for Enterprises</span>
-    </h1>
-    <div class="hero-row">
+    <div class="hero-main">
       <div class="hero-copy">
+        <h1 class="title" id="title">
+          <span>Designing a</span>
+          <span class="hot">Human-AI</span>
+          <span class="edge-line"><span>Innovation <span class="hot">Edge</span></span></span>
+          <span>for Enterprises</span>
+        </h1>
         <p class="sub">Strategy Use Cases on Building “Trilingual Skills” (Design × AI × Domain) for the Future of Innovation</p>
         <p class="mono by">Developed by SUTD · Supported by SGTech and SkillsFuture Singapore (SSG)</p>
         <div class="ctas">
@@ -338,7 +378,12 @@ p{margin:0}
           <a class="btn btn--line" href="#leaders"><strong>Watch the leaders' brief</strong><span class="mono">Executive summary · video</span></a>
         </div>
       </div>
-      <nav class="itinerary" aria-label="The route">
+      <figure class="field field--hero">
+        <span class="photo"><img src="img/field-ejc-group.jpg" width="1100" height="824" alt="Group selfie of a large class of students and staff, smiling in a classroom"><span class="corners" aria-hidden="true"></span></span>
+        <figcaption class="mono"><b>Field photo · from the report</b>Eunoia Junior College, where staff and students learned AI side by side</figcaption>
+      </figure>
+    </div>
+    <nav class="itinerary" aria-label="The route">
         <p class="kicker"><span class="sq"></span>The route</p>
         <ol>
           <li><a href="#briefing"><span class="n">01</span><span class="t">The Briefing</span><span class="m">98 pages</span></a></li>
@@ -347,8 +392,7 @@ p{margin:0}
           <li><a href="#languages"><span class="n">04</span><span class="t">Every Language</span><span class="m">16 editions</span></a></li>
           <li><a href="#edge"><span class="n">05</span><span class="t">The Edge</span><span class="m">4,000+ trained</span></a></li>
         </ol>
-      </nav>
-    </div>
+    </nav>
   </div>
 </section>
 
@@ -442,6 +486,27 @@ p{margin:0}
       <li><span class="d-n">09</span><div><p class="d-t">Create new tasks, new roles, and new value.</p><p class="d-p"><b>Forward Deployment Designer</b>A stalled project went from stuck to beta testing in three months.</p></div></li>
       <li><span class="d-n">10</span><div><p class="d-t">Invest in community, because it's not just about “me”; it's also about “we.”</p><p class="d-p"><b>SSG × SGTech × SUTD</b>No single organisation could have produced these results alone.</p></div></li>
     </ol>
+    <div class="infield">
+      <p class="kicker"><span class="sq"></span>The decisions, in the field · photos from the report</p>
+      <div class="infield-row">
+        <figure class="field">
+          <span class="photo"><img src="img/field-ejc-pushup.jpg" width="531" height="354" alt="A student does push-ups in a school hall while classmates watch a laptop on the floor"></span>
+          <figcaption><b class="mono">Decision 02 · Eunoia Junior College</b><span>On Learning Day, students built working apps in a day, including a push-up counter that uses AI vision.</span></figcaption>
+        </figure>
+        <figure class="field">
+          <span class="photo"><img src="img/field-wsg-skillswap.jpg" width="840" height="560" alt="Hands moving illustrated career cards on a table during the Skill Swap game"></span>
+          <figcaption><b class="mono">Decision 06 · WSG × SUTD</b><span>Skill Swap, a role-play game in the What's Next workshops for workers aged 50 and above.</span></figcaption>
+        </figure>
+        <figure class="field">
+          <span class="photo"><img src="img/field-ohc.jpg" width="840" height="560" alt="A student presents an app on a screen to staff seated around a table"></span>
+          <figcaption><b class="mono">Decision 07 · NLB Oral History Centre</b><span>Students demonstrate Interview Companion to the Oral History Centre. A student project became a national tool.</span></figcaption>
+        </figure>
+        <figure class="field">
+          <span class="photo"><img src="img/field-ejc-class.jpg" width="688" height="459" alt="Teachers and students gathered around laptops in a classroom"></span>
+          <figcaption><b class="mono">Decision 10 · Eunoia Junior College</b><span>Teachers and students learned AI side by side, as peers.</span></figcaption>
+        </figure>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -458,7 +523,7 @@ p{margin:0}
     </header>
     <div class="films">
       <div class="film-wrap">
-        <a class="film film--mono" href="https://www.youtube.com/watch?v=1Q8ZB3im5NQ" target="_blank" rel="noopener" aria-label="Watch the short AI Impact Series film on YouTube">
+        <a class="film" href="https://www.youtube.com/watch?v=1Q8ZB3im5NQ" target="_blank" rel="noopener" aria-label="Watch the short AI Impact Series film on YouTube">
           <span class="frame">
             <img src="img/video-impact-short.jpg" width="960" height="540" alt="Workshop room with participants at laptops, overlaid with the text: 111 companies impacted, 439 individuals trained, as of January 2026">
             <span class="corners" aria-hidden="true"></span>
@@ -470,9 +535,9 @@ p{margin:0}
         </a>
       </div>
       <div class="film-wrap">
-        <a class="film film--mono" href="https://www.youtube.com/watch?v=TwpBCAL7cUE" target="_blank" rel="noopener" aria-label="Watch the long AI Impact Series film on SGTech's YouTube channel">
+        <a class="film" href="https://www.youtube.com/watch?v=TwpBCAL7cUE" target="_blank" rel="noopener" aria-label="Watch the long AI Impact Series film on SGTech's YouTube channel">
           <span class="frame">
-            <img src="img/video-impact-long.jpg" width="960" height="540" alt="A participant working at her desk, with the caption: and also help us to create some creativity in our work">
+            <img src="img/video-impact-long.jpg" width="960" height="540" alt="A woman in an SGTech shirt speaking in an office, with the on-screen title: Practical ways to apply AI">
             <span class="corners" aria-hidden="true"></span>
             <span class="play" aria-hidden="true">Play on YouTube</span>
           </span>
@@ -481,6 +546,26 @@ p{margin:0}
           <p class="note">Enterprises tell the story of their AI adoption in their own words.</p>
         </a>
         <a class="alt ext" href="https://www.youtube.com/watch?v=TGDkQyVnJhY" target="_blank" rel="noopener">Film B is also on YouTube here</a>
+      </div>
+    </div>
+    <div class="voices">
+      <p class="kicker"><span class="sq"></span>Voices from the films</p>
+      <div class="voice-row">
+        <figure class="voice">
+          <span class="photo"><img src="img/voice-simplygo.jpg" width="432" height="540" alt="A woman smiling in front of the SimplyGo sign"></span>
+          <blockquote><p>“…and it makes my life so much easier.”</p></blockquote>
+          <figcaption class="mono">SimplyGo · Film A, short</figcaption>
+        </figure>
+        <figure class="voice">
+          <span class="photo"><img src="img/voice-sgtech.jpg" width="448" height="560" alt="A woman in an SGTech shirt speaking in an office"></span>
+          <blockquote><p>“…actually came away with three prototypes.”</p></blockquote>
+          <figcaption class="mono">SGTech · Film B, long</figcaption>
+        </figure>
+        <figure class="voice">
+          <span class="photo"><img src="img/voice-film-b.jpg" width="448" height="560" alt="A woman smiling at her desk in an office"></span>
+          <blockquote><p>“…and also help us to create some creativity in our work.”</p></blockquote>
+          <figcaption class="mono">Film B, long</figcaption>
+        </figure>
       </div>
     </div>
     <div class="series-foot">
@@ -564,6 +649,19 @@ p{margin:0}
           <span class="big">92%</span>
           <p>recommendation rate from the leaders and professionals trained.</p>
         </div>
+      </div>
+      <div class="faces">
+        <div class="faces-row" aria-hidden="true">
+          <img src="img/field-ejc-group.jpg" alt="" style="object-position:0% 50%">
+          <img src="img/voice-simplygo.jpg" alt="" style="object-position:50% 20%">
+          <img src="img/field-ohc.jpg" alt="" style="object-position:8% 50%">
+          <img src="img/voice-sgtech.jpg" alt="" style="object-position:50% 25%">
+          <img src="img/field-ejc-pushup.jpg" alt="" style="object-position:40% 50%">
+          <img src="img/voice-film-b.jpg" alt="" style="object-position:50% 30%">
+          <img src="img/field-wsg-skillswap.jpg" alt="" style="object-position:55% 50%">
+          <img src="img/field-ejc-class.jpg" alt="" style="object-position:40% 50%">
+        </div>
+        <p class="mono">Faces from the field · the report's case studies and the AI Impact Series films</p>
       </div>
     </div>
   </div>

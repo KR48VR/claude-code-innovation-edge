@@ -5,13 +5,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..800;1,62..125,400..700&family=Big+Shoulders+Display:wght@600..900&family=Martian+Mono:wdth,wght@75..112.5,400..600&display=swap">
 <style>
-/* Layout: an expedition in five stages. It descends from the report cover's concrete grey into black and ends on a full red field; a sticky route bar tracks the stage. */
+/* Layout: an expedition in five stages. Each stage opens through a dark "door" with a moving backdrop (film, report, screens), then settles into a calm reading band; the journey ends on a full red field. A sticky route bar tracks the stage. */
 :root{
-  --concrete:#E3E2DE; --concrete-2:#CFCECA; --stone:#D3D2CE;
+  --concrete:#E3E2DE; --stone:#D3D2CE;
   --ink:#121213; --graphite:#1C1D1F; --coal:#131315; --void:#0A0A0B;
   --signal:#D3172A; --signal-hi:#FF4D5A;
   --bone:#F2F0EC; --dim:#A09E9A; --dim-ink:#55544F;
   --rule-light:rgba(18,18,19,.18); --rule-dark:rgba(242,240,236,.14);
+  --shade:rgba(10,10,11,.9); --shade-mid:rgba(10,10,11,.55); --shade-lo:rgba(10,10,11,.2); --clear:rgba(10,10,11,0);
   --f-display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
   --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
   --f-mono:"Martian Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
@@ -39,12 +40,11 @@ p{margin:0}
 
 .wrap{max-width:1240px;margin:0 auto;padding-left:var(--gut-l);padding-right:var(--gut-r)}
 .band{background:var(--bg);color:var(--fg)}
-.s-concrete{--bg:var(--concrete);--fg:var(--ink);--muted:var(--dim-ink);--rule:var(--rule-light);--hot:var(--signal);color-scheme:light}
 .s-stone{--bg:var(--stone);--fg:var(--ink);--muted:var(--dim-ink);--rule:var(--rule-light);--hot:var(--signal);color-scheme:light}
 .s-ink{--bg:var(--ink);--fg:var(--bone);--muted:var(--dim);--rule:var(--rule-dark);--hot:var(--signal-hi)}
 .s-graphite{--bg:var(--graphite);--fg:var(--bone);--muted:var(--dim);--rule:var(--rule-dark);--hot:var(--signal-hi)}
 .s-coal{--bg:var(--coal);--fg:var(--bone);--muted:var(--dim);--rule:var(--rule-dark);--hot:var(--signal-hi)}
-.s-void{--bg:var(--void);--fg:var(--bone);--muted:var(--dim);--rule:var(--rule-dark);--hot:var(--signal-hi)}
+.s-void{--bg:var(--void);--fg:var(--bone);--muted:var(--dim);--rule:var(--rule-dark);--hot:var(--signal-hi);color-scheme:dark}
 .s-red{--bg:var(--signal);--fg:var(--bone);--muted:rgba(242,240,236,.86);--rule:rgba(18,18,19,.28);--hot:var(--ink)}
 
 /* shared type */
@@ -73,54 +73,92 @@ p{margin:0}
 .progress i{display:block;height:100%;background:var(--signal);transform-origin:left center;transform:scaleX(0)}
 @media (max-width:640px){.mark .mono{display:none}}
 
+/* ---------- moving backdrops ---------- */
+.reel{position:absolute;inset:0;z-index:0;overflow:hidden;background:var(--void)}
+.reel img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;opacity:0;transition:opacity 1.8s ease;transform-origin:var(--ko,50% 50%);animation:drift var(--kd,16s) ease-in-out infinite alternate;animation-play-state:paused}
+.reel img.is-on{opacity:1}
+.k1{--kx0:-1.5%;--ky0:1%;--ks0:1.03;--kx1:1.5%;--ky1:-1%;--ks1:1.12}
+.k2{--kx0:2%;--ky0:-1%;--ks0:1.1;--kx1:-1%;--ky1:1%;--ks1:1.02;--ko:70% 40%}
+.k3{--kx0:0%;--ky0:2%;--ks0:1.04;--kx1:0%;--ky1:-2%;--ks1:1.14;--ko:40% 30%}
+.kz1{--kx0:-5%;--ky0:-3%;--ks0:1.2;--kx1:5%;--ky1:3%;--ks1:1.45;--kd:22s;--ko:30% 40%}
+.kz2{--kx0:5%;--ky0:3%;--ks0:1.45;--kx1:-4%;--ky1:-2%;--ks1:1.18;--kd:24s;--ko:70% 60%}
+.kz3{--kx0:0%;--ky0:-5%;--ks0:1.25;--kx1:0%;--ky1:5%;--ks1:1.5;--kd:20s;--ko:50% 20%}
+@keyframes drift{from{transform:translate3d(var(--kx0,0%),var(--ky0,0%),0) scale(var(--ks0,1.05))}to{transform:translate3d(var(--kx1,0%),var(--ky1,0%),0) scale(var(--ks1,1.15))}}
+.anim{animation-play-state:paused!important}
+.is-live .reel img{animation-play-state:running}
+.is-live .anim{animation-play-state:running!important}
+.reel-cap{position:absolute;z-index:3;top:18px;right:var(--gut-r);display:flex;align-items:center;gap:8px;max-width:calc(100% - 32px);color:var(--bone);background:rgba(10,10,11,.55);padding:6px 10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-stretch:87.5%;pointer-events:none}
+.reel-cap::before{content:"";width:7px;height:7px;background:var(--signal-hi);flex:none}
+
+/* doors: the dark, moving opening of each stage */
+.door{position:relative;overflow:hidden;isolation:isolate}
+.door::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,var(--shade-mid) 0%,rgba(10,10,11,.3) 24%,rgba(10,10,11,.74) 48%,rgba(10,10,11,.93) 70%,var(--void) 100%)}
+.door .reel img{filter:saturate(.85)}
+.door > .wrap{position:relative;z-index:2;padding-block:clamp(150px,19vw,280px) clamp(32px,4vw,52px)}
+.door .stage-head{border-bottom-color:var(--rule)}
+.door .h2{text-shadow:0 2px 24px rgba(10,10,11,.6)}
+.door--strip > .wrap{padding-top:clamp(250px,28vw,360px)}
+
+/* film strip */
+.strip{position:absolute;z-index:0;left:-12%;right:-12%;top:clamp(24px,4vw,56px);transform:rotate(-3.5deg);background:var(--ink);padding:22px 0}
+.strip::before,.strip::after{content:"";position:absolute;left:0;right:0;height:9px;background:repeating-linear-gradient(90deg,rgba(242,240,236,.42) 0 12px,var(--clear) 12px 28px)}
+.strip::before{top:7px}.strip::after{bottom:7px}
+.strip-track{display:flex;width:max-content;animation:strip 80s linear infinite}
+.strip-set{display:flex;gap:10px;padding-right:10px}
+.strip img{width:clamp(220px,24vw,340px);max-width:none;aspect-ratio:16/9;object-fit:cover}
+@keyframes strip{to{transform:translateX(-50%)}}
+
+/* tilted screens */
+.screens{position:absolute;inset:0;z-index:0;overflow:hidden;perspective:1400px}
+.screens-plane{position:absolute;left:50%;top:50%;width:min(1500px,150%);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:26px;transform:translate(-50%,-50%) rotateX(34deg) rotateZ(-14deg);transform-style:preserve-3d}
+.col{display:flex;flex-direction:column;gap:26px;animation:colUp 90s linear infinite}
+.col.down{animation-name:colDown;animation-duration:110s}
+.col img{width:100%;box-shadow:0 30px 60px rgba(10,10,11,.6);outline:1px solid rgba(242,240,236,.14)}
+@keyframes colUp{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+@keyframes colDown{from{transform:translateY(-50%)}to{transform:translateY(0)}}
+
 /* ---------- hero ---------- */
-.hero{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(100deg,var(--concrete) 35%,var(--concrete-2) 100%)}
-.hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
-.ai-text{position:absolute;z-index:-2;top:-6%;right:-8%;width:min(760px,64%);height:82%;overflow:hidden;font-family:var(--f-mono);font-size:10.5px;line-height:1.6;letter-spacing:.08em;word-spacing:.35em;color:var(--ink);opacity:.09;transform:skewX(-24deg);-webkit-mask-image:linear-gradient(200deg,rgba(0,0,0,1) 25%,rgba(0,0,0,0) 85%);mask-image:linear-gradient(200deg,rgba(0,0,0,1) 25%,rgba(0,0,0,0) 85%);pointer-events:none;user-select:none}
-.hero-in{display:grid;gap:clamp(28px,4vw,44px);padding-block:clamp(32px,5vw,72px) clamp(36px,5vw,64px)}
-.hero-main{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,5vw,72px);align-items:center}
-.title{font-family:var(--f-display);font-weight:900;font-size:var(--t-hero);line-height:.86;text-transform:uppercase;letter-spacing:.004em;color:var(--ink)}
+.hero{position:relative;overflow:hidden;isolation:isolate;display:grid;min-height:clamp(600px,84vh,800px)}
+.hero .reel{left:32%}
+.hero-shade{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,var(--void) 0%,var(--void) 32%,rgba(10,10,11,.72) 44%,var(--shade-lo) 66%,rgba(10,10,11,.3) 100%),linear-gradient(0deg,var(--void) 0%,var(--clear) 36%)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+.hero-in{position:relative;z-index:4;align-self:end;width:100%;display:grid;gap:clamp(28px,4vw,44px);padding-block:clamp(72px,8vw,110px) clamp(28px,4vw,48px)}
+.hero-copy{display:grid;gap:22px;min-width:0;max-width:640px}
+.title{font-family:var(--f-display);font-weight:900;font-size:var(--t-hero);line-height:.86;text-transform:uppercase;letter-spacing:.004em;color:var(--bone);text-shadow:0 2px 30px rgba(10,10,11,.5)}
 .title > span{display:block}
-.title .hot{color:var(--signal)}
+.title .hot{color:var(--signal-hi)}
 .title .edge-line{display:flex;align-items:center;gap:.18em}
 .title .edge-line > span{min-width:0}
-.title .edge-line::after{content:"";flex:1 1 40px;height:.07em;min-width:40px;background:var(--signal);transform:translateY(-.04em)}
-.photo{position:relative;display:block;overflow:hidden;background:var(--ink);max-width:100%}
-.photo img{width:100%;height:100%;object-fit:cover}
-.field{margin:0;display:grid;gap:12px;min-width:0;align-content:start}
-.field figcaption{color:var(--muted)}
-.field figcaption b{display:block;color:var(--hot);font-weight:600;margin-bottom:3px}
-.field figcaption span{display:block;font-size:14.5px;line-height:1.45}
-.field--hero{padding:0 14px 0 0}
-.field--hero .photo{aspect-ratio:4/3;box-shadow:14px 14px 0 var(--signal)}
-.field--hero figcaption{margin-top:14px}
-.hero-copy{display:grid;gap:22px;min-width:0}
+.title .edge-line::after{content:"";flex:1 1 40px;height:.07em;min-width:40px;background:var(--signal-hi);transform:translateY(-.04em)}
 .hero-copy .sub{font-size:var(--t-lead);line-height:1.45;max-width:46ch;font-weight:500}
-.hero-copy .by{color:var(--dim-ink)}
+.hero-copy .by{color:var(--muted)}
 .ctas{display:flex;flex-wrap:wrap;gap:12px}
-.btn{display:inline-flex;flex-direction:column;justify-content:center;gap:6px;padding:14px 20px 13px;min-height:58px;text-decoration:none;border:2px solid var(--ink);color:var(--ink);transition:background .2s,color .2s,border-color .2s}
+.btn{display:inline-flex;flex-direction:column;justify-content:center;gap:6px;padding:14px 20px 13px;min-height:58px;text-decoration:none;border:2px solid var(--fg);color:var(--fg);transition:background .2s,color .2s,border-color .2s}
 .btn strong{font-family:var(--f-display);font-weight:800;font-size:22px;line-height:1;text-transform:uppercase;letter-spacing:.02em}
 .btn .mono{font-size:10px;letter-spacing:.1em}
 .btn--hot{background:var(--signal);border-color:var(--signal);color:var(--bone)}
-.btn--hot:hover{background:var(--ink);border-color:var(--ink)}
-.btn--line:hover{background:var(--ink);color:var(--concrete)}
+.btn--hot:hover{background:var(--bone);border-color:var(--bone);color:var(--ink)}
+.btn--line{background:rgba(10,10,11,.35)}
+.btn--line:hover{background:var(--fg);color:var(--bg)}
 .itinerary{min-width:0}
-.itinerary .kicker{color:var(--dim-ink);margin-bottom:10px}
-.itinerary ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:2px solid var(--ink);border-bottom:1px solid var(--rule-light)}
+.itinerary .kicker{margin-bottom:10px}
+.itinerary ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:2px solid var(--fg);border-bottom:1px solid var(--rule)}
 .itinerary li{min-width:0}
-.itinerary li + li a{border-left:1px solid var(--rule-light)}
-.itinerary a{display:grid;gap:6px;align-content:start;height:100%;padding:12px 14px 14px;text-decoration:none;color:var(--ink);transition:background .2s,color .2s}
-.itinerary .n{font-family:var(--f-mono);font-size:11px;color:var(--signal);font-weight:600}
+.itinerary li + li a{border-left:1px solid var(--rule)}
+.itinerary a{display:grid;gap:6px;align-content:start;height:100%;padding:12px 14px 14px;text-decoration:none;color:var(--fg);transition:background .2s,color .2s}
+.itinerary .n{font-family:var(--f-mono);font-size:11px;color:var(--hot);font-weight:600}
 .itinerary .t{font-family:var(--f-display);font-weight:700;font-size:21px;line-height:1.05;text-transform:uppercase}
-.itinerary .m{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim-ink);font-stretch:87.5%}
-.itinerary a:hover{background:var(--ink);color:var(--concrete)}
-.itinerary a:hover .m{color:var(--dim)}
+.itinerary .m{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-stretch:87.5%}
+.itinerary a:hover{background:var(--fg);color:var(--bg)}
+.itinerary a:hover .m{color:var(--dim-ink)}
 @media (max-width:860px){
-  .hero-main{grid-template-columns:minmax(0,1fr)}
-  .field--hero{max-width:560px}
+  .hero{min-height:0}
+  .hero .reel{left:0;bottom:auto;height:84vw}
+  .hero-shade{background:linear-gradient(180deg,var(--shade-lo) 0%,rgba(10,10,11,.45) 40vw,var(--void) 82vw)}
+  .hero-in{padding-top:58vw}
   .itinerary ol{grid-template-columns:minmax(0,1fr);border-top:0}
   .itinerary li + li a{border-left:0}
-  .itinerary a{grid-template-columns:34px minmax(0,1fr) auto;align-items:baseline;gap:10px;padding:11px 8px;border-top:1px solid var(--rule-light)}
+  .itinerary a{grid-template-columns:34px minmax(0,1fr) auto;align-items:baseline;gap:10px;padding:11px 8px;border-top:1px solid var(--rule)}
   .itinerary .m{text-align:right}
 }
 
@@ -133,18 +171,13 @@ p{margin:0}
 .ticker li.lbl{color:var(--signal-hi)}
 .ticker:hover .ticker-track{animation-play-state:paused}
 @keyframes tick{to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){
-  .ticker-track{animation:none;width:auto}
-  .ticker ul{flex-wrap:wrap;row-gap:4px;padding-inline:var(--gut-l) var(--gut-r)}
-  .ticker ul[aria-hidden]{display:none}
-}
 
 /* ---------- stages ---------- */
 .stage{position:relative;scroll-margin-top:calc(var(--bar-h) + 2px + env(safe-area-inset-top,0px))}
-.stage > .wrap{padding-block:clamp(64px,9vw,128px);display:grid;gap:clamp(40px,5vw,64px)}
+.stage > .wrap{padding-block:clamp(48px,6vw,96px) clamp(64px,9vw,128px);display:grid;gap:clamp(40px,5vw,64px)}
 .stage-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;border-bottom:1px solid var(--rule);padding-bottom:clamp(24px,3vw,36px)}
 .stage-copy{display:grid;gap:18px;min-width:0}
-.stage-no{font-family:var(--f-display);font-weight:900;font-size:clamp(84px,14vw,210px);line-height:.74;color:transparent;-webkit-text-stroke:1.5px var(--fg);opacity:.3;user-select:none}
+.stage-no{font-family:var(--f-display);font-weight:900;font-size:clamp(84px,14vw,210px);line-height:.74;color:transparent;-webkit-text-stroke:1.5px var(--fg);opacity:.32;user-select:none}
 
 /* stage 01 */
 .brief{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,5vw,72px);align-items:start}
@@ -153,7 +186,7 @@ p{margin:0}
 .cover:hover img{transform:translate(-4px,-4px);box-shadow:0 1px 0 var(--rule-light),24px 24px 0 var(--signal)}
 .brief figcaption{margin-top:34px;color:var(--dim-ink)}
 .brief-copy{display:grid;gap:32px;min-width:0}
-.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--ink);border-bottom:1px solid var(--rule)}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--ink);border-bottom:1px solid var(--rule);margin:0}
 .facts div{padding:14px 12px 16px 0;display:grid;gap:4px}
 .facts div + div{padding-left:14px;border-left:1px solid var(--rule)}
 .facts dt{color:var(--muted)}
@@ -226,11 +259,13 @@ p{margin:0}
 .chips a:hover .eng,.chips a:focus-visible .eng{color:var(--bone)}
 .btn-dark{display:inline-flex;align-items:center;gap:12px;justify-self:start;padding:14px 20px;background:var(--bone);color:var(--ink);text-decoration:none;font-family:var(--f-display);font-weight:800;font-size:22px;text-transform:uppercase;letter-spacing:.02em;transition:background .2s,color .2s}
 .btn-dark:hover{background:var(--signal);color:var(--bone)}
-.classified{position:relative;display:grid;gap:16px;padding:26px 24px 24px;border:1px dashed var(--muted);text-decoration:none;background:repeating-linear-gradient(-45deg,rgba(242,240,236,.025) 0 10px,transparent 10px 20px);transition:border-color .2s}
+.classified{position:relative;display:grid;gap:16px;padding:26px 24px 24px;border:1px dashed var(--muted);text-decoration:none;overflow:hidden;isolation:isolate;transition:border-color .2s}
+.classified::before{content:"";position:absolute;inset:-20px;z-index:-1;background:linear-gradient(rgba(10,10,11,.72),rgba(10,10,11,.86)),url("img/fx/restricted.jpg") center top/cover;transition:transform 1.2s ease}
 .classified:hover{border-color:var(--signal-hi)}
-.stamp{justify-self:start;font-family:var(--f-mono);font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal-hi);border:2px solid var(--signal-hi);padding:5px 10px;transform:rotate(-3deg);font-stretch:87.5%}
+.classified:hover::before{transform:scale(1.06)}
+.stamp{justify-self:start;font-family:var(--f-mono);font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal-hi);border:2px solid var(--signal-hi);padding:5px 10px;transform:rotate(-3deg);font-stretch:87.5%;background:rgba(10,10,11,.5)}
 .classified .h3{font-size:clamp(28px,2.6vw,36px)}
-.classified p{font-size:15.5px;color:var(--muted)}
+.classified p{font-size:15.5px;color:var(--bone)}
 .redact{display:grid;gap:7px}
 .redact i{display:block;height:11px;background:var(--fg);opacity:.85}
 .redact i:nth-child(1){width:92%}.redact i:nth-child(2){width:74%}.redact i:nth-child(3){width:83%}.redact i:nth-child(4){width:41%}
@@ -240,7 +275,6 @@ p{margin:0}
 
 /* stage 05 */
 .edge-top > .wrap{padding-block:clamp(64px,9vw,128px) clamp(56px,7vw,96px)}
-.edge-top .stage-head{border-bottom-color:var(--rule)}
 .edge-top .stage-no{opacity:.45;-webkit-text-stroke-color:var(--ink)}
 .edge-top .kicker{color:var(--bone)}
 .edge-top .sq{background:var(--ink)}
@@ -260,16 +294,23 @@ p{margin:0}
 .pct p{font-size:var(--t-lead);line-height:1.45;max-width:24ch;color:var(--bone)}
 @media (max-width:860px){.numbers{grid-template-columns:minmax(0,1fr)}.pct{border-left:0;border-top:2px solid var(--ink);padding-left:0;padding-top:24px}}
 
-.colab > .wrap{padding-block:clamp(64px,9vw,120px);display:grid;gap:clamp(40px,5vw,64px)}
+.colab{position:relative;overflow:hidden;isolation:isolate}
+.colab > .wrap{position:relative;z-index:1;padding-block:clamp(64px,9vw,120px);display:grid;gap:clamp(40px,5vw,64px)}
+.colab-screen{margin:0;display:grid;gap:14px;perspective:1300px;min-width:0}
+.colab-plane{position:relative;height:clamp(300px,32vw,440px);overflow:hidden;transform:rotateY(-16deg) rotateX(6deg);transform-origin:left center;box-shadow:0 40px 80px rgba(10,10,11,.7),0 0 0 1px var(--rule)}
+.colab-plane img{width:100%;max-width:none;animation:pageScroll 40s ease-in-out infinite alternate}
+.colab-screen figcaption{display:flex;align-items:center;gap:8px;justify-content:flex-end;color:var(--muted)}
+.colab-screen figcaption::before{content:"";width:7px;height:7px;background:var(--signal-hi)}
+@keyframes pageScroll{from{transform:translateY(0)}to{transform:translateY(-58%)}}
 .led{display:flex;align-items:center;gap:16px;font-family:var(--f-display);font-weight:800;font-size:clamp(22px,2.4vw,30px);text-transform:uppercase;color:var(--signal-hi)}
 .led::after{content:"";flex:1;height:2px;background:var(--signal)}
-.colab-head{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,4vw,64px);align-items:end}
-.colab-head .name{font-family:var(--f-display);font-weight:900;font-size:clamp(54px,8vw,124px);line-height:.85;text-transform:uppercase}
+.colab-head{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:clamp(28px,5vw,72px);align-items:center}
+.colab-head .name{font-family:var(--f-display);font-weight:900;font-size:clamp(54px,7.4vw,116px);line-height:.85;text-transform:uppercase}
 .colab-head .name em{font-style:normal;color:var(--signal-hi)}
-.colab-head .right{display:grid;gap:18px;min-width:0}
-.colab-head .right .lead{font-size:clamp(17px,1.4vw,19px)}
-.colab-head .right a{justify-self:start}
-@media (max-width:860px){.colab-head{grid-template-columns:minmax(0,1fr)}}
+.colab-head .left{display:grid;gap:18px;min-width:0}
+.colab-head .left .lead{font-size:clamp(17px,1.4vw,19px)}
+.colab-head .left a{justify-self:start}
+@media (max-width:860px){.colab-head{grid-template-columns:minmax(0,1fr)}.colab-plane{height:300px}}
 .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--rule)}
 .steps li{display:grid;gap:10px;align-content:start;padding:22px clamp(16px,2vw,28px) 24px 0;min-width:0}
 .steps li + li{padding-left:clamp(16px,2vw,28px);border-left:1px solid var(--rule)}
@@ -308,6 +349,13 @@ p{margin:0}
 @media (max-width:760px){.clips{grid-template-columns:minmax(0,1fr)}}
 
 /* people: field photos, voices, faces */
+.photo{position:relative;display:block;overflow:hidden;background:var(--ink);max-width:100%}
+.photo img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
+.field{margin:0;display:grid;gap:12px;min-width:0;align-content:start}
+.field:hover .photo img,.voice:hover .photo img{transform:scale(1.05)}
+.field figcaption{color:var(--muted)}
+.field figcaption b{display:block;color:var(--hot);font-weight:600;margin-bottom:3px}
+.field figcaption span{display:block;font-size:14.5px;line-height:1.45}
 .infield{display:grid;gap:16px}
 .infield-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(16px,2vw,24px)}
 .infield .photo{aspect-ratio:3/2}
@@ -327,7 +375,9 @@ p{margin:0}
 }
 .faces{display:grid;gap:12px}
 .faces-row{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
-.faces-row img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--ink)}
+.faces-row span{display:block;overflow:hidden;aspect-ratio:1/1;background:var(--ink)}
+.faces-row img{width:100%;height:100%;object-fit:cover;animation:breathe 9s ease-in-out infinite alternate;animation-delay:calc(var(--i,0) * -1.2s)}
+@keyframes breathe{from{transform:scale(1)}to{transform:scale(1.16)}}
 .faces .mono{color:var(--bone)}
 @media (max-width:640px){.faces-row{grid-template-columns:repeat(4,minmax(0,1fr))}}
 
@@ -339,7 +389,13 @@ p{margin:0}
 .foot-meta a{color:var(--fg);text-decoration:none}
 .foot-meta a:hover{color:var(--signal-hi)}
 
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+  .reel img,.anim,.ticker-track{animation:none!important}
+  .ticker-track{width:auto}
+  .ticker ul{flex-wrap:wrap;row-gap:4px;padding-inline:var(--gut-l) var(--gut-r)}
+  .ticker ul[aria-hidden]{display:none}
+}
 </style>
 
 <header class="route">
@@ -358,40 +414,42 @@ p{margin:0}
 
 <main>
 <!-- ===== base camp ===== -->
-<section class="hero band s-concrete" id="top" aria-labelledby="title">
+<section class="hero band s-void" id="top" aria-labelledby="title" data-live>
+  <div class="reel" data-interval="6500" aria-hidden="true">
+    <img class="is-on k1" src="img/fx/hero-1.jpg" alt="" data-cap="Field photo · Eunoia Junior College" style="--ko:35% 50%">
+    <img class="k2" src="img/fx/hero-2.jpg" alt="" data-cap="Film B · AI Impact Series" style="object-position:62% 30%">
+    <img class="k3" src="img/fx/hero-3.jpg" alt="" data-cap="Field photo · Students and NLB's Oral History Centre" style="object-position:55% 50%">
+    <img class="k1" src="img/fx/hero-4.jpg" alt="" data-cap="Film B · SGTech" style="object-position:44% 30%">
+    <img class="k2" src="img/fx/hero-5.jpg" alt="" data-cap="Film A · SimplyGo" style="object-position:50% 30%">
+  </div>
+  <div class="hero-shade" aria-hidden="true"></div>
   <canvas aria-hidden="true"></canvas>
-  <div class="ai-text" aria-hidden="true"></div>
+  <p class="reel-cap" aria-hidden="true"><span class="cap-txt">Field photo · Eunoia Junior College</span></p>
   <div class="wrap hero-in">
-    <p class="kicker"><span class="sq"></span>Expedition briefing · Singapore 2026 · Only for the brave</p>
-    <div class="hero-main">
-      <div class="hero-copy">
-        <h1 class="title" id="title">
-          <span>Designing a</span>
-          <span class="hot">Human-AI</span>
-          <span class="edge-line"><span>Innovation <span class="hot">Edge</span></span></span>
-          <span>for Enterprises</span>
-        </h1>
-        <p class="sub">Strategy Use Cases on Building “Trilingual Skills” (Design × AI × Domain) for the Future of Innovation</p>
-        <p class="mono by">Developed by SUTD · Supported by SGTech and SkillsFuture Singapore (SSG)</p>
-        <div class="ctas">
-          <a class="btn btn--hot" href="https://www.sutd.edu.sg/wp-content/uploads/2026/04/Designing-A-Human-AI-Innovation-Edge-For-Enterprises-April-2026.pdf" target="_blank" rel="noopener"><strong class="ext">Read the report</strong><span class="mono">PDF · 98 pages · 40 MB</span></a>
-          <a class="btn btn--line" href="#leaders"><strong>Watch the leaders' brief</strong><span class="mono">Executive summary · video</span></a>
-        </div>
+    <div class="hero-copy">
+      <p class="kicker"><span class="sq"></span>Expedition briefing · Singapore 2026 · Only for the brave</p>
+      <h1 class="title" id="title">
+        <span>Designing a</span>
+        <span class="hot">Human-AI</span>
+        <span class="edge-line"><span>Innovation <span class="hot">Edge</span></span></span>
+        <span>for Enterprises</span>
+      </h1>
+      <p class="sub">Strategy Use Cases on Building “Trilingual Skills” (Design × AI × Domain) for the Future of Innovation</p>
+      <p class="mono by">Developed by SUTD · Supported by SGTech and SkillsFuture Singapore (SSG)</p>
+      <div class="ctas">
+        <a class="btn btn--hot" href="https://www.sutd.edu.sg/wp-content/uploads/2026/04/Designing-A-Human-AI-Innovation-Edge-For-Enterprises-April-2026.pdf" target="_blank" rel="noopener"><strong class="ext">Read the report</strong><span class="mono">PDF · 98 pages · 40 MB</span></a>
+        <a class="btn btn--line" href="#leaders"><strong>Watch the leaders' brief</strong><span class="mono">Executive summary · video</span></a>
       </div>
-      <figure class="field field--hero">
-        <span class="photo"><img src="img/field-ejc-group.jpg" width="1100" height="824" alt="Group selfie of a large class of students and staff, smiling in a classroom"><span class="corners" aria-hidden="true"></span></span>
-        <figcaption class="mono"><b>Field photo · from the report</b>Eunoia Junior College, where staff and students learned AI side by side</figcaption>
-      </figure>
     </div>
     <nav class="itinerary" aria-label="The route">
-        <p class="kicker"><span class="sq"></span>The route</p>
-        <ol>
-          <li><a href="#briefing"><span class="n">01</span><span class="t">The Briefing</span><span class="m">98 pages</span></a></li>
-          <li><a href="#leaders"><span class="n">02</span><span class="t">The Leaders' Brief</span><span class="m">10 decisions</span></a></li>
-          <li><a href="#impact-series"><span class="n">03</span><span class="t">AI Impact Series</span><span class="m">2 films</span></a></li>
-          <li><a href="#languages"><span class="n">04</span><span class="t">Every Language</span><span class="m">16 editions</span></a></li>
-          <li><a href="#edge"><span class="n">05</span><span class="t">The Edge</span><span class="m">4,000+ trained</span></a></li>
-        </ol>
+      <p class="kicker"><span class="sq"></span>The route</p>
+      <ol>
+        <li><a href="#briefing"><span class="n">01</span><span class="t">The Briefing</span><span class="m">98 pages</span></a></li>
+        <li><a href="#leaders"><span class="n">02</span><span class="t">The Leaders' Brief</span><span class="m">10 decisions</span></a></li>
+        <li><a href="#impact-series"><span class="n">03</span><span class="t">AI Impact Series</span><span class="m">2 films</span></a></li>
+        <li><a href="#languages"><span class="n">04</span><span class="t">Every Language</span><span class="m">16 editions</span></a></li>
+        <li><a href="#edge"><span class="n">05</span><span class="t">The Edge</span><span class="m">4,000+ trained</span></a></li>
+      </ol>
     </nav>
   </div>
 </section>
@@ -409,14 +467,26 @@ p{margin:0}
 
 <!-- ===== stage 01 ===== -->
 <section class="stage band s-stone" id="briefing" aria-labelledby="h-briefing">
+  <div class="door band s-void" data-live>
+    <div class="reel" data-interval="7000" aria-hidden="true">
+      <img class="is-on kz1" src="img/fx/rep-2.jpg" alt="" loading="lazy" data-cap="From the report · Gardens by the Bay">
+      <img class="kz2" src="img/fx/rep-3.jpg" alt="" loading="lazy" data-cap="From the report · Vector Green">
+      <img class="kz3" src="img/fx/rep-8.jpg" alt="" loading="lazy" data-cap="From the report · SimplyGo">
+      <img class="kz1" src="img/fx/rep-5.jpg" alt="" loading="lazy" data-cap="From the report · KHL Printing">
+      <img class="kz2" src="img/fx/rep-4.jpg" alt="" loading="lazy" data-cap="From the report · The future is built, not taught">
+    </div>
+    <p class="reel-cap" aria-hidden="true"><span class="cap-txt">From the report · Gardens by the Bay</span></p>
+    <div class="wrap">
+      <header class="stage-head">
+        <div class="stage-copy">
+          <p class="kicker"><span class="sq"></span>Stage 01 / 05 · The Briefing</p>
+          <h2 class="h2" id="h-briefing">What AI can do <em>for</em> people. And what people can do <em>with</em> AI.</h2>
+        </div>
+        <span class="stage-no" aria-hidden="true">01</span>
+      </header>
+    </div>
+  </div>
   <div class="wrap">
-    <header class="stage-head">
-      <div class="stage-copy">
-        <p class="kicker"><span class="sq"></span>Stage 01 / 05 · The Briefing</p>
-        <h2 class="h2" id="h-briefing">What AI can do <em>for</em> people. And what people can do <em>with</em> AI.</h2>
-      </div>
-      <span class="stage-no" aria-hidden="true">01</span>
-    </header>
     <div class="brief">
       <figure style="margin:0">
         <a class="cover" href="https://www.sutd.edu.sg/wp-content/uploads/2026/04/Designing-A-Human-AI-Innovation-Edge-For-Enterprises-April-2026.pdf" target="_blank" rel="noopener" aria-label="Open the report PDF">
@@ -447,14 +517,24 @@ p{margin:0}
 
 <!-- ===== stage 02 ===== -->
 <section class="stage band s-graphite" id="leaders" aria-labelledby="h-leaders">
+  <div class="door band s-void" data-live>
+    <div class="reel" data-interval="6500" aria-hidden="true">
+      <img class="is-on kz1" src="img/fx/rep-1.jpg" alt="" loading="lazy" data-cap="From the report · From tool to teammate in decision-making">
+      <img class="kz3" src="img/fx/rep-6.jpg" alt="" loading="lazy" data-cap="From the report · Executive Summary">
+      <img class="kz2" src="img/fx/rep-7.jpg" alt="" loading="lazy" data-cap="From the report · The Forward Deployment Designer">
+    </div>
+    <p class="reel-cap" aria-hidden="true"><span class="cap-txt">From the report · From tool to teammate in decision-making</span></p>
+    <div class="wrap">
+      <header class="stage-head">
+        <div class="stage-copy">
+          <p class="kicker"><span class="sq"></span>Stage 02 / 05 · The Leaders' Brief</p>
+          <h2 class="h2" id="h-leaders">Ten decisions to put <em>humans</em> at the heart of the age of AI.</h2>
+        </div>
+        <span class="stage-no" aria-hidden="true">02</span>
+      </header>
+    </div>
+  </div>
   <div class="wrap">
-    <header class="stage-head">
-      <div class="stage-copy">
-        <p class="kicker"><span class="sq"></span>Stage 02 / 05 · The Leaders' Brief</p>
-        <h2 class="h2" id="h-leaders">Ten decisions to put <em>humans</em> at the heart of the age of AI.</h2>
-      </div>
-      <span class="stage-no" aria-hidden="true">02</span>
-    </header>
     <div class="brief-film">
       <a class="film" href="https://www.youtube.com/watch?v=JOoViusvzz8" target="_blank" rel="noopener" aria-label="Watch the executive summary video on YouTube">
         <span class="frame">
@@ -512,15 +592,29 @@ p{margin:0}
 
 <!-- ===== stage 03 ===== -->
 <section class="stage band s-coal" id="impact-series" aria-labelledby="h-series">
-  <div class="wrap">
-    <header class="stage-head">
-      <div class="stage-copy">
-        <p class="kicker"><span class="sq"></span>Stage 03 / 05 · AI Impact Series</p>
-        <h2 class="h2" id="h-series">Real enterprise stories of AI adoption and <em>transformation.</em></h2>
-        <p class="lead muted">The AI Impact Series is one of the programmes behind the report's use cases. SGTech conceptualised it, and it is now delivered in collaboration with SUTD. Two films tell its story. Start with the short one, then go long.</p>
+  <div class="door door--strip band s-void" data-live>
+    <div class="strip" aria-hidden="true">
+      <div class="strip-track anim">
+        <div class="strip-set">
+          <img src="img/fx/strip-1.jpg" alt="" loading="lazy"><img src="img/fx/strip-2.jpg" alt="" loading="lazy"><img src="img/fx/strip-4.jpg" alt="" loading="lazy"><img src="img/fx/strip-5.jpg" alt="" loading="lazy"><img src="img/fx/strip-7.jpg" alt="" loading="lazy"><img src="img/fx/strip-3.jpg" alt="" loading="lazy"><img src="img/fx/strip-6.jpg" alt="" loading="lazy">
+        </div>
+        <div class="strip-set">
+          <img src="img/fx/strip-1.jpg" alt="" loading="lazy"><img src="img/fx/strip-2.jpg" alt="" loading="lazy"><img src="img/fx/strip-4.jpg" alt="" loading="lazy"><img src="img/fx/strip-5.jpg" alt="" loading="lazy"><img src="img/fx/strip-7.jpg" alt="" loading="lazy"><img src="img/fx/strip-3.jpg" alt="" loading="lazy"><img src="img/fx/strip-6.jpg" alt="" loading="lazy">
+        </div>
       </div>
-      <span class="stage-no" aria-hidden="true">03</span>
-    </header>
+    </div>
+    <div class="wrap">
+      <header class="stage-head">
+        <div class="stage-copy">
+          <p class="kicker"><span class="sq"></span>Stage 03 / 05 · AI Impact Series</p>
+          <h2 class="h2" id="h-series">Real enterprise stories of AI adoption and <em>transformation.</em></h2>
+        </div>
+        <span class="stage-no" aria-hidden="true">03</span>
+      </header>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="lead muted">The AI Impact Series is one of the programmes behind the report's use cases. SGTech conceptualised it, and it is now delivered in collaboration with SUTD. Two films tell its story. Start with the short one, then go long.</p>
     <div class="films">
       <div class="film-wrap">
         <a class="film" href="https://www.youtube.com/watch?v=1Q8ZB3im5NQ" target="_blank" rel="noopener" aria-label="Watch the short AI Impact Series film on YouTube">
@@ -577,14 +671,27 @@ p{margin:0}
 
 <!-- ===== stage 04 ===== -->
 <section class="stage band s-void" id="languages" aria-labelledby="h-lang">
-  <div class="wrap">
-    <header class="stage-head">
-      <div class="stage-copy">
-        <p class="kicker"><span class="sq"></span>Stage 04 / 05 · Every Language</p>
-        <h2 class="h2" id="h-lang">One report. <em>Sixteen</em> languages.</h2>
+  <div class="door band s-void" data-live>
+    <div class="screens" aria-hidden="true">
+      <div class="screens-plane">
+        <div class="col anim"><img src="img/fx/comp-zh.jpg" alt="" loading="lazy"><img src="img/fx/comp-ta.jpg" alt="" loading="lazy"><img src="img/fx/comp-zh.jpg" alt="" loading="lazy"><img src="img/fx/comp-ta.jpg" alt="" loading="lazy"></div>
+        <div class="col down anim"><img src="img/fx/comp-hi.jpg" alt="" loading="lazy"><img src="img/fx/comp-ja.jpg" alt="" loading="lazy"><img src="img/fx/comp-hi.jpg" alt="" loading="lazy"><img src="img/fx/comp-ja.jpg" alt="" loading="lazy"></div>
+        <div class="col anim"><img src="img/fx/comp-th.jpg" alt="" loading="lazy"><img src="img/fx/comp-ms.jpg" alt="" loading="lazy"><img src="img/fx/comp-th.jpg" alt="" loading="lazy"><img src="img/fx/comp-ms.jpg" alt="" loading="lazy"></div>
+        <div class="col down anim"><img src="img/fx/comp-ja.jpg" alt="" loading="lazy"><img src="img/fx/comp-zh.jpg" alt="" loading="lazy"><img src="img/fx/comp-ja.jpg" alt="" loading="lazy"><img src="img/fx/comp-zh.jpg" alt="" loading="lazy"></div>
       </div>
-      <span class="stage-no" aria-hidden="true">04</span>
-    </header>
+    </div>
+    <p class="reel-cap" aria-hidden="true"><span class="cap-txt">The companion in 中文 · தமிழ் · हिन्दी · 日本語 · ไทย · Melayu</span></p>
+    <div class="wrap">
+      <header class="stage-head">
+        <div class="stage-copy">
+          <p class="kicker"><span class="sq"></span>Stage 04 / 05 · Every Language</p>
+          <h2 class="h2" id="h-lang">One report. <em>Sixteen</em> languages.</h2>
+        </div>
+        <span class="stage-no" aria-hidden="true">04</span>
+      </header>
+    </div>
+  </div>
+  <div class="wrap">
     <div class="lang">
       <div class="lang-main">
         <p class="lead muted">A prototype companion site carries the report's ideas to readers in the language they think in, from 中文 and Bahasa Melayu to தமிழ் and Singlish. It is an experiment in accessibility. For consequential decisions, check the original report.</p>
@@ -622,7 +729,7 @@ p{margin:0}
 
 <!-- ===== stage 05 ===== -->
 <section class="stage" id="edge" aria-labelledby="h-edge">
-  <div class="band s-red edge-top">
+  <div class="band s-red edge-top" data-live>
     <div class="wrap" style="display:grid;gap:clamp(40px,5vw,64px)">
       <header class="stage-head">
         <div class="stage-copy">
@@ -652,30 +759,34 @@ p{margin:0}
       </div>
       <div class="faces">
         <div class="faces-row" aria-hidden="true">
-          <img src="img/field-ejc-group.jpg" alt="" style="object-position:0% 50%">
-          <img src="img/voice-simplygo.jpg" alt="" style="object-position:50% 20%">
-          <img src="img/field-ohc.jpg" alt="" style="object-position:8% 50%">
-          <img src="img/voice-sgtech.jpg" alt="" style="object-position:50% 25%">
-          <img src="img/field-ejc-pushup.jpg" alt="" style="object-position:40% 50%">
-          <img src="img/voice-film-b.jpg" alt="" style="object-position:50% 30%">
-          <img src="img/field-wsg-skillswap.jpg" alt="" style="object-position:55% 50%">
-          <img src="img/field-ejc-class.jpg" alt="" style="object-position:40% 50%">
+          <span><img class="anim" src="img/field-ejc-group.jpg" alt="" loading="lazy" style="object-position:0% 50%;--i:0"></span>
+          <span><img class="anim" src="img/voice-simplygo.jpg" alt="" loading="lazy" style="object-position:50% 20%;--i:3"></span>
+          <span><img class="anim" src="img/field-ohc.jpg" alt="" loading="lazy" style="object-position:8% 50%;--i:6"></span>
+          <span><img class="anim" src="img/voice-sgtech.jpg" alt="" loading="lazy" style="object-position:50% 25%;--i:1"></span>
+          <span><img class="anim" src="img/field-ejc-pushup.jpg" alt="" loading="lazy" style="object-position:40% 50%;--i:4"></span>
+          <span><img class="anim" src="img/voice-film-b.jpg" alt="" loading="lazy" style="object-position:50% 30%;--i:7"></span>
+          <span><img class="anim" src="img/field-wsg-skillswap.jpg" alt="" loading="lazy" style="object-position:55% 50%;--i:2"></span>
+          <span><img class="anim" src="img/field-ejc-class.jpg" alt="" loading="lazy" style="object-position:40% 50%;--i:5"></span>
         </div>
         <p class="mono">Faces from the field · the report's case studies and the AI Impact Series films</p>
       </div>
     </div>
   </div>
 
-  <div class="band s-void colab">
+  <div class="band s-void colab" data-live>
     <div class="wrap">
       <p class="led">And it opened a new door</p>
       <div class="colab-head">
-        <h3 class="name">SUTD CoLab <em>@ LLI</em></h3>
-        <div class="right">
+        <div class="left">
+          <h3 class="name">SUTD CoLab <em>@ LLI</em></h3>
           <p class="kicker"><span class="sq"></span>Opened 26 October 2026 · Lifelong Learning Institute</p>
           <p class="lead muted">An innovation lab where organisations learn, build and deploy AI-assisted solutions for real workplace challenges. From concept to working prototype in 3 days.</p>
           <a class="link-hot ext" href="https://www.sutd.edu.sg/admissions/academy/sutd-colab-lli/" target="_blank" rel="noopener">Visit SUTD CoLab @ LLI</a>
         </div>
+        <figure class="colab-screen" aria-hidden="true">
+          <div class="colab-plane"><img class="anim" src="img/fx/colab-page.jpg" alt="" loading="lazy"></div>
+          <figcaption class="mono">As seen on sutd.edu.sg</figcaption>
+        </figure>
       </div>
       <ol class="steps">
         <li><span class="sn">STEP 1</span><span class="st">Learn</span><p>Participants learn to apply AI to the real challenges in their own work.</p></li>
@@ -736,35 +847,61 @@ p{margin:0}
 (function(){
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---- the cover's "AI TRANSFORMS LIFE" texture ---- */
-  var tx = document.querySelector('.ai-text');
-  if (tx) tx.textContent = new Array(300).join('AI TRANSFORMS LIFE ');
+  /* ---- reels: crossfade between frames while their section is on screen ---- */
+  function Reel(el){
+    this.imgs = Array.prototype.slice.call(el.querySelectorAll('img'));
+    this.i = 0; this.t = 0;
+    this.ms = +el.getAttribute('data-interval') || 6500;
+    var cap = el.parentNode.querySelector(':scope > .reel-cap .cap-txt');
+    this.cap = cap;
+  }
+  Reel.prototype.step = function(){
+    var a = this.imgs[this.i];
+    this.i = (this.i + 1) % this.imgs.length;
+    var b = this.imgs[this.i];
+    b.classList.add('is-on'); a.classList.remove('is-on');
+    if (this.cap && b.getAttribute('data-cap')) this.cap.textContent = b.getAttribute('data-cap');
+  };
+  Reel.prototype.play = function(){ if (this.t || reduce || this.imgs.length < 2) return; var s = this; this.t = setInterval(function(){ s.step(); }, this.ms); };
+  Reel.prototype.stop = function(){ clearInterval(this.t); this.t = 0; };
 
-  /* ---- hero network: drifting nodes, links to the pointer ---- */
+  var live = Array.prototype.slice.call(document.querySelectorAll('[data-live]'));
+  live.forEach(function(el){ el._reels = Array.prototype.slice.call(el.querySelectorAll(':scope > .reel')).map(function(r){ return new Reel(r); }); });
+  function setLive(el, on){
+    el.classList.toggle('is-live', on);
+    el._reels.forEach(function(r){ on ? r.play() : r.stop(); });
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ setLive(e.target, e.isIntersecting && !document.hidden); }); }, { rootMargin: '80px 0px' });
+    live.forEach(function(el){ io.observe(el); });
+    document.addEventListener('visibilitychange', function(){
+      live.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        setLive(el, !document.hidden && r.bottom > 0 && r.top < innerHeight);
+      });
+    });
+  } else {
+    live.forEach(function(el){ setLive(el, true); });
+  }
+
+  /* ---- hero network: drifting nodes over the people, links to the pointer ---- */
   var hero = document.querySelector('.hero');
   var cv = hero && hero.querySelector('canvas');
   if (cv && cv.getContext) {
     var ctx = cv.getContext('2d');
     var css = getComputedStyle(document.documentElement);
-    var INK = css.getPropertyValue('--ink').trim() || '#121213';
-    var RED = css.getPropertyValue('--signal').trim() || '#D3172A';
+    var LINE = css.getPropertyValue('--bone').trim() || '#F2F0EC';
+    var RED = css.getPropertyValue('--signal-hi').trim() || '#FF4D5A';
     var W = 0, H = 0, dpr = 1, nodes = [], rays = [], ptr = null, visible = true, raf = 0;
     function rnd(a, b){ return a + Math.random() * (b - a); }
     function seed(){
-      var n = Math.round(Math.max(36, Math.min(130, W * H / 9500)));
+      var n = Math.round(Math.max(36, Math.min(120, W * H / 10000)));
       nodes = [];
       for (var i = 0; i < n; i++) {
-        nodes.push({
-          x: W * (1 - 0.96 * Math.pow(Math.random(), 1.5)),
-          y: rnd(0, H),
-          vx: rnd(-.18, .18), vy: rnd(-.18, .18),
-          red: Math.random() < .1
-        });
+        nodes.push({ x: W * (1 - 0.96 * Math.pow(Math.random(), 1.3)), y: rnd(0, H), vx: rnd(-.2, .2), vy: rnd(-.2, .2), red: Math.random() < .12 });
       }
       rays = [];
-      for (var j = 0; j < 9; j++) {
-        rays.push({ x1: rnd(W * .35, W), y1: rnd(-20, H * .3), x2: rnd(W * .2, W * 1.1), y2: rnd(H * .7, H + 20), red: j < 2 });
-      }
+      for (var j = 0; j < 8; j++) rays.push({ x1: rnd(W * .3, W), y1: rnd(-20, H * .3), x2: rnd(W * .2, W * 1.1), y2: rnd(H * .7, H + 20), red: j < 2 });
     }
     function size(){
       var r = hero.getBoundingClientRect();
@@ -779,18 +916,18 @@ p{margin:0}
       ctx.lineWidth = .7;
       for (var k = 0; k < rays.length; k++) {
         var ry = rays[k];
-        ctx.globalAlpha = ry.red ? .55 : .14;
-        ctx.strokeStyle = ry.red ? RED : INK;
+        ctx.globalAlpha = ry.red ? .5 : .12;
+        ctx.strokeStyle = ry.red ? RED : LINE;
         ctx.beginPath(); ctx.moveTo(ry.x1, ry.y1); ctx.lineTo(ry.x2, ry.y2); ctx.stroke();
       }
-      var D = 118, D2 = D * D;
-      ctx.strokeStyle = INK;
+      var D = 120, D2 = D * D;
+      ctx.strokeStyle = LINE;
       for (var i = 0; i < nodes.length; i++) {
         var a = nodes[i];
         for (var j = i + 1; j < nodes.length; j++) {
           var b = nodes[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
           if (d2 < D2) {
-            ctx.globalAlpha = (1 - Math.sqrt(d2) / D) * .32;
+            ctx.globalAlpha = (1 - Math.sqrt(d2) / D) * .28;
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           }
         }
@@ -799,16 +936,16 @@ p{margin:0}
         ctx.strokeStyle = RED;
         for (var p = 0; p < nodes.length; p++) {
           var c = nodes[p], ex = c.x - ptr.x, ey = c.y - ptr.y, e = Math.sqrt(ex * ex + ey * ey);
-          if (e < 170) {
-            ctx.globalAlpha = (1 - e / 170) * .85;
+          if (e < 180) {
+            ctx.globalAlpha = (1 - e / 180) * .9;
             ctx.beginPath(); ctx.moveTo(ptr.x, ptr.y); ctx.lineTo(c.x, c.y); ctx.stroke();
           }
         }
       }
       for (var q = 0; q < nodes.length; q++) {
         var m = nodes[q];
-        ctx.globalAlpha = m.red ? .95 : .55;
-        ctx.fillStyle = m.red ? RED : INK;
+        ctx.globalAlpha = m.red ? .95 : .6;
+        ctx.fillStyle = m.red ? RED : LINE;
         var s = m.red ? 4 : 2.2;
         ctx.fillRect(m.x - s / 2, m.y - s / 2, s, s);
       }
